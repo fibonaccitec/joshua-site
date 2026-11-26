@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Situation } from "@/components/situation";
 import { JsonLd } from "@/components/json-ld";
+import { PhoneFrame, ScreenFrame } from "@/components/device";
+import { ProductTour, type TourStep } from "@/components/product-tour";
 import { brl, packages, startingPackage } from "@/lib/pricing";
-import { demoUrl, monthlyPrice, openGraph, site } from "@/lib/site";
+import { appScreens, webScreens } from "@/lib/screens";
+import { demoUrl, monthlyPrice, openGraph, shell, site } from "@/lib/site";
 
 const title = "Joshua · Sistema de gestão para integradoras";
 
@@ -13,11 +15,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: openGraph("/", title, site.description),
 };
-
-/* Text needs AA contrast on paper, so the evidence uses the darkest ladder step. */
-const marginHigh = "var(--color-margin-high)";
-
-const flow = ["Proposta", "Aceite", "Projeto", "Compras", "Obra", "Campo", "Financeiro"];
 
 const priced = packages.filter((p): p is typeof p & { monthly: number } => p.monthly !== null);
 
@@ -46,189 +43,172 @@ const softwareApplication = {
   },
 };
 
+const tour: readonly TourStep[] = [
+  {
+    label: "Vender",
+    text: "Todas as oportunidades num funil, com o valor em jogo em cada etapa.",
+    screen: webScreens.oportunidades,
+  },
+  {
+    label: "Orçar",
+    text: "Proposta montada por soluções. O total muda de cor conforme a margem.",
+    screen: webScreens.proposta,
+  },
+  {
+    label: "Projetar",
+    text: "Cada projeto com responsável, revisão e o que falta para andar.",
+    screen: webScreens.projetos,
+  },
+  {
+    label: "Comprar",
+    text: "Do orçamento ao recebido, cada ordem de compra no lugar.",
+    screen: webScreens.compras,
+  },
+  {
+    label: "Executar",
+    text: "O andamento de cada obra, etapa por etapa, com a história toda registrada.",
+    screen: webScreens.obra,
+  },
+];
+
+function DemoButton({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={demoUrl()}
+      target="_blank"
+      rel="noopener"
+      className={`inline-block rounded-full bg-signal px-6 py-3.5 text-base font-bold text-on-signal transition-colors hover:bg-ink hover:text-on-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${className}`}
+    >
+      Agendar demonstração
+      <span className="sr-only"> (abre o WhatsApp)</span>
+    </a>
+  );
+}
+
 export default function Home() {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-[120px]">
+    <div className="bg-white">
       <JsonLd data={softwareApplication} />
       <SiteHeader />
 
       <main>
-        <section className="border-b border-line pt-20 pb-16 md:pt-28 md:pb-24">
-          <p className="caption mb-7 text-brand">Para donos de integradora</p>
-          <h1 className="mb-14 max-w-[15ch] text-display font-light tracking-[-0.045em] md:mb-18">
-            O técnico mais antigo saiu de férias.{" "}
-            <span className="block font-bold">E a empresa parou junto.</span>
-          </h1>
-          <div className="grid gap-8 text-lede md:ml-[33%] md:grid-cols-2 md:gap-20">
-            <p>
-              A planta estava no celular dele. A lista de material, na cabeça do projetista. A última
-              proposta, no WhatsApp do vendedor. Nenhuma dessas pessoas fez nada errado: é a empresa
-              que ainda não tem onde guardar o que sabe.
+        <div className="overflow-hidden">
+          <section>
+            <div className={`${shell} pt-14 md:pt-20`}>
+              <h1 className="max-w-[14ch] text-hero font-extrabold tracking-[-0.045em]">
+                Sua integradora inteira numa tela só.
+              </h1>
+              <p className="mt-6 max-w-[36ch] text-intro text-mute">
+                Proposta, projeto, compras, obra e campo conversando entre si. Sem planilha, sem
+                depender de quem está de férias.
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <DemoButton />
+                <span className="text-[0.9375rem] text-mute">30 a 60 minutos pelo WhatsApp</span>
+              </div>
+            </div>
+
+            {/* Light top, ink stage: the dark begins behind the product screens. */}
+            <div className="mt-14 bg-[linear-gradient(var(--color-white)_0_3.5rem,var(--color-ink)_3.5rem)] md:mt-16 lg:bg-[linear-gradient(var(--color-white)_0_6rem,var(--color-ink)_6rem)]">
+              <div
+                className={`${shell} relative h-[260px] overflow-y-clip sm:h-[420px] lg:h-[560px]`}
+              >
+                <div className="relative h-full">
+                  <ScreenFrame
+                    screen={webScreens.obra}
+                    sizes="(min-width: 1024px) 1100px, 90vw"
+                    eager
+                    className="absolute top-0 bottom-0 left-0 w-[88%] lg:right-[220px] lg:w-auto"
+                  />
+                  <PhoneFrame
+                    screen={appScreens.osDetalhe}
+                    sizes="(min-width: 1024px) 250px, 30vw"
+                    className="absolute top-14 right-0 w-[32%] max-w-[250px] shadow-stage sm:top-20 lg:top-24 lg:right-10"
+                  />
+                </div>
+                {/* Screens sink into the ink stage instead of ending on a hard crop. */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -inset-x-[100vw] bottom-0 h-28 bg-linear-to-b from-ink/0 to-ink"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section
+            id="como-funciona"
+            aria-labelledby="como-funciona-titulo"
+            className="relative -mt-px bg-ink pt-20 pb-24 text-on-ink md:pt-28 md:pb-32"
+          >
+            <div className={shell}>
+              <h2 id="como-funciona-titulo" className="sr-only">
+                Como funciona
+              </h2>
+              <ProductTour steps={tour} />
+            </div>
+          </section>
+        </div>
+
+        <section
+          id="app-de-campo"
+          aria-labelledby="app-de-campo-titulo"
+          className={`${shell} grid items-center gap-14 py-24 md:py-32 lg:grid-cols-2`}
+        >
+          <div>
+            <h2
+              id="app-de-campo-titulo"
+              className="max-w-[16ch] text-statement font-extrabold tracking-[-0.04em]"
+            >
+              O técnico resolve no celular. O escritório vê na hora.
+            </h2>
+            <p className="mt-5 max-w-[36ch] text-intro text-mute">
+              Ordem de serviço, retirada de material e foto do serviço pronto, até sem internet.
             </p>
-            <p>
-              O Joshua é esse lugar. Da proposta à obra entregue, o que sua equipe sabe fica no
-              sistema, e a empresa{" "}
-              <span className="highlight">vende mais sem depender de quem está de plantão.</span>
-            </p>
+          </div>
+          <div className="flex justify-center gap-3 pt-10 sm:gap-5">
+            <PhoneFrame
+              screen={appScreens.osLista}
+              sizes="(min-width: 1024px) 200px, 30vw"
+              className="w-[30%] max-w-[200px] border-ink shadow-float"
+            />
+            <PhoneFrame
+              screen={appScreens.confirmarInstalacao}
+              sizes="(min-width: 1024px) 200px, 30vw"
+              className="w-[30%] max-w-[200px] -translate-y-10 border-ink shadow-float"
+            />
+            <PhoneFrame
+              screen={appScreens.servicoConcluido}
+              sizes="(min-width: 1024px) 200px, 30vw"
+              className="w-[30%] max-w-[200px] border-ink shadow-float"
+            />
           </div>
         </section>
 
-        <section id="problema" aria-labelledby="problema-titulo" className="py-6">
-          <h2 id="problema-titulo" className="sr-only">
-            Situações que o Joshua resolve
-          </h2>
-
-          <Situation
-            n="01"
-            title="O desconto que comeu a obra."
-            evidence={[
-              { label: "Desconto", value: "5%" },
-              { label: "Total", value: "R$ 45.790", tone: marginHigh },
-            ]}
-            caption="O total muda de cor conforme a margem."
-          >
-            <p>
-              Você descobre no fim da obra que trabalhou quase de graça. No Joshua, a margem muda de
-              cor enquanto o vendedor baixa o preço. Ele negocia sabendo até onde pode ir, e você
-              para de ser surpreendido no fechamento.
-            </p>
-          </Situation>
-
-          <Situation
-            n="02"
-            title="As horas que ninguém cobrou."
-            evidence={[
-              { label: 'Caixa in-ceiling 8"', value: "Instalação 1,5 h" },
-              { label: "Keypad 6 teclas", value: "Programação 0,5 h" },
-            ]}
-            caption="Horas cadastradas uma vez, usadas em toda venda."
-          >
-            <p>
-              Instalação e programação saem no chute, ou ficam de fora, ou dependem do olho do técnico
-              veterano. Cada produto já traz as horas por tipo de profissional, e até o vendedor que
-              chegou ontem monta a proposta com as contas certas.
-            </p>
-          </Situation>
-
-          <Situation
-            n="03"
-            title="O cliente aprovou. E agora?"
-            evidence={[
-              { label: "Aceite", value: "3 parcelas criadas" },
-              { label: "Engenharia", value: "Projeto aberto" },
-            ]}
-            caption="Um aceite, três departamentos sabendo."
-          >
-            <p>
-              O financeiro lança parcela por parcela e a engenharia nem sabe que a obra existe. No
-              aceite, as parcelas aparecem no financeiro e o projeto entra no quadro da engenharia,
-              sem ninguém digitar nada de novo.
-            </p>
-          </Situation>
-
-          <Situation
-            n="04"
-            title="Só o projetista mais antigo sabe quanto cabo vai."
-            evidence={[
-              { label: "Regras de cálculo", value: "Da sua empresa" },
-              { label: "Lista de material", value: "Gerada do projeto" },
-            ]}
-            caption="O critério sai da cabeça e entra no sistema."
-          >
-            <p>
-              Quando ele erra ou sai da empresa, falta material na obra. Com as regras de cálculo da
-              sua empresa gravadas no sistema, um projetista menos experiente monta o planejamento do
-              mesmo jeito.
-            </p>
-          </Situation>
-
-          <Situation
-            n="05"
-            title="“O ponto não foi instalado.”"
-            evidence={[
-              { label: "Câmera 04 · garagem", value: "Concluído 14:32" },
-              { label: "Evidência", value: "Foto com legenda" },
-            ]}
-            caption="O que acontece em campo chega ao escritório com prova."
-          >
-            <p>
-              A foto que provaria o contrário ficou no celular do técnico. Cada serviço concluído
-              volta ao escritório com foto e legenda, e o motivo fica escrito quando algo não foi
-              feito. A discussão com o cliente acaba ali.
-            </p>
-          </Situation>
-
-          <Situation
-            n="06"
-            title="O vendedor saiu, e o negócio foi junto."
-            evidence={[
-              { label: "Planta", value: "Na ficha do negócio" },
-              { label: "Última proposta", value: "Na ficha do negócio" },
-            ]}
-            caption="O negócio fica com a empresa, não com o vendedor."
-          >
-            <p>
-              Férias, demissão, troca de carteira: ninguém acha a planta, a última proposta ou o que
-              foi combinado com o cliente. Com tudo junto na ficha do negócio, quem assume continua
-              de onde ele parou.
-            </p>
-          </Situation>
-        </section>
-
-        <section
-          id="como-funciona"
-          aria-labelledby="como-funciona-titulo"
-          className="border-b border-line py-20 md:py-28"
-        >
-          <p className="caption mb-7 text-brand">Como funciona</p>
-          <h2
-            id="como-funciona-titulo"
-            className="mb-10 max-w-[24ch] text-section font-light tracking-[-0.025em]"
-          >
-            Um sistema só, em que cada departamento enxerga o que o anterior fez.
-          </h2>
-          <ol className="flex flex-wrap items-baseline gap-x-3 gap-y-2 text-section font-bold tracking-[-0.025em]">
-            {flow.map((step, i) => (
-              <li key={step} className="flex items-baseline gap-3">
-                {step}
-                {i < flow.length - 1 && (
-                  <span aria-hidden="true" className="font-light text-mute">
-                    →
-                  </span>
-                )}
-              </li>
-            ))}
-          </ol>
-          <p className="mt-10 max-w-[60ch] text-lede text-body">
-            No escritório, pelo navegador. Em campo, pelo aplicativo do técnico, que funciona mesmo
-            sem sinal. Cada um vê o que precisa para fazer a sua parte, e o dono vê tudo.
-          </p>
-        </section>
-
-        <section aria-labelledby="preco-titulo" className="py-24 md:ml-[176px] md:py-32">
-          <h2 id="preco-titulo" className="caption mb-7 text-brand">
-            Quanto custa
-          </h2>
-          <p className="mb-10 max-w-[28ch] text-section font-light leading-tight tracking-[-0.02em] md:text-[2.25rem]">
-            Um plano com todos os módulos. Você paga pelo tamanho da equipe:{" "}
-            <strong className="font-bold">
-              a partir de {brl.format(startingPackage.monthly)} por mês
-            </strong>
-            , até {startingPackage.maxUsers} pessoas.{" "}
-            <Link href="/precos" className="cta-link font-bold">
-              Ver os pacotes
-            </Link>
-          </p>
-          <p className="mb-10 max-w-[28ch] text-section font-light leading-tight tracking-[-0.02em] md:text-[2.25rem]">
-            Antes de qualquer coisa, a gente conversa.{" "}
-            <a href={demoUrl()} target="_blank" rel="noopener" className="cta-link">
-              Marque uma demonstração <span aria-hidden="true">→</span>
-              <span className="sr-only"> (abre o WhatsApp)</span>
-            </a>
-          </p>
-          <p className="caption text-mute">
-            Quem conduz a demonstração é o Claudio, do time do Joshua · 30 a 60 minutos
-          </p>
+        <section aria-labelledby="preco-titulo" className={`${shell} pb-24 md:pb-32`}>
+          <div className="flex flex-col gap-8 rounded-band bg-brand px-8 py-12 text-on-ink md:flex-row md:items-center md:gap-12 md:px-14 md:py-14">
+            <div>
+              <h2
+                id="preco-titulo"
+                className="text-[clamp(2rem,3.6vw,2.75rem)] leading-[1.05] font-extrabold tracking-[-0.035em]"
+              >
+                A partir de {brl.format(startingPackage.monthly)} por mês.
+              </h2>
+              <p className="mt-3 text-lg text-brand-soft">
+                Até {startingPackage.maxUsers} pessoas. Equipes maiores,{" "}
+                <Link
+                  href="/precos"
+                  className="font-semibold text-on-ink underline decoration-on-ink/40 decoration-2 underline-offset-4 hover:decoration-on-ink"
+                >
+                  veja os pacotes
+                </Link>
+                .
+              </p>
+            </div>
+            <div className="md:ml-auto md:text-right">
+              <DemoButton className="px-7 py-4 text-[1.0625rem]" />
+              <p className="mt-3 text-sm text-brand-soft">Com o time do Joshua, de 30 a 60 minutos</p>
+            </div>
+          </div>
         </section>
       </main>
 
