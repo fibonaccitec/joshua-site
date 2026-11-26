@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
+import { PageBand } from "@/components/page-band";
 import { brl, packages, type Package } from "@/lib/pricing";
-import { demoUrl, monthlyPrice, openGraph, site } from "@/lib/site";
+import { demoUrl, monthlyPrice, openGraph, shell, site } from "@/lib/site";
 
 const description =
   "Planos do Joshua por tamanho de equipe: Standard até 5 usuários por R$ 690/mês, Premium até 15 usuários por R$ 1.490/mês e Enterprise sob consulta.";
@@ -30,7 +31,7 @@ const faq = [
   },
   {
     q: "Como é a demonstração?",
-    a: "Uma conversa de 30 a 60 minutos com o Claudio, do time do Joshua, olhando o sistema com os exemplos da sua integradora.",
+    a: "Uma conversa de 30 a 60 minutos com o time do Joshua, olhando o sistema com os exemplos da sua integradora.",
   },
 ] as const;
 
@@ -100,54 +101,50 @@ const jsonLd = {
 
 export default function PricingPage() {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-[120px]">
+    <div className="bg-white">
       <JsonLd data={jsonLd} />
       <SiteHeader current="/precos" />
 
       <main>
-        <section className="grid items-end gap-8 pt-20 pb-14 md:pt-24 lg:grid-cols-[1fr_380px] lg:gap-x-20">
-          <p className="caption text-brand lg:col-span-2">Preços</p>
-          <h1 className="text-[clamp(2.75rem,6vw,4.5rem)] leading-[0.98] font-light tracking-[-0.045em]">
-            Quanto custa para <b className="block font-bold">a sua equipe.</b>
-          </h1>
-          <p className="pb-1.5 text-lede text-body">
-            Três pacotes, separados pelo número de pessoas que entram no sistema. Conte todo mundo
-            que faz login, do escritório ou de campo: cada login é um usuário.
-          </p>
-        </section>
+        <PageBand
+          title="Quanto custa para a sua equipe."
+          lede="Três pacotes, separados pelo número de pessoas que entram no sistema. Cada login é um usuário, do escritório ou do campo."
+        />
 
-        <section aria-label="Pacotes" className="pb-22">
-          <div className="grid gap-5 md:grid-cols-3">
+        <div className={`${shell} pb-24 md:pb-32`}>
+          <section aria-label="Pacotes" className="grid gap-5 md:grid-cols-3">
             {packages.map((pkg, i) => {
               const cta = ctaFor(pkg);
               const lead = pkg.id === "premium";
               return (
                 <article
                   key={pkg.id}
-                  className={`flex flex-col rounded bg-white p-8 ${
-                    lead ? "border-2 border-ink p-[31px]" : "border border-line"
+                  className={`flex flex-col rounded-screen bg-white p-8 shadow-float ${
+                    lead ? "outline-2 outline-brand" : ""
                   }`}
                 >
-                  <h2 className={`caption ${lead ? "text-brand" : "text-mute"}`}>{pkg.name}</h2>
-                  <p className="mt-3.5 text-lede text-body">
+                  <h2 className="text-[0.9375rem] font-bold text-brand">{pkg.name}</h2>
+                  <p className="mt-2.5 text-[1.0625rem] text-mute">
                     {usersLabel(pkg, i > 0 ? packages[i - 1].maxUsers : null)}
                   </p>
                   {pkg.monthly !== null ? (
-                    <p className="mt-6 flex min-h-11 items-start text-[2.75rem] leading-none font-bold tracking-[-0.03em] tabular-nums">
-                      <span className="mt-1 mr-1 text-lg font-medium tracking-normal">R$</span>
+                    <p className="mt-6 mb-8 flex min-h-12 items-baseline text-5xl font-extrabold tracking-[-0.035em] tabular-nums">
+                      <span className="mr-1 text-lg font-semibold tracking-normal">R$</span>
                       {brl.format(pkg.monthly).replace(/^R\$\s?/, "")}
-                      <span className="mt-auto ml-1 text-base font-normal tracking-normal text-mute">
+                      <span className="ml-1 text-base font-normal tracking-normal text-mute">
                         /mês
                       </span>
                     </p>
                   ) : (
-                    <p className="mt-6 min-h-11 text-4xl leading-none font-light">Sob consulta</p>
+                    <p className="mt-6 mb-8 flex min-h-12 items-baseline text-4xl font-light">
+                      Sob consulta
+                    </p>
                   )}
                   <a
                     href={cta.href}
                     target="_blank"
                     rel="noopener"
-                    className="mt-8 block rounded bg-signal px-5 py-3.5 text-center text-[0.9375rem] font-bold text-on-signal transition-colors hover:bg-ink hover:text-paper"
+                    className="mt-auto block rounded-full bg-signal px-5 py-3.5 text-center text-[0.9375rem] font-bold text-on-signal transition-colors hover:bg-ink hover:text-on-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
                   >
                     {cta.label}
                     <span className="sr-only"> (abre o WhatsApp)</span>
@@ -155,36 +152,44 @@ export default function PricingPage() {
                 </article>
               );
             })}
-          </div>
+          </section>
 
-          <div className="mt-5 grid gap-4 rounded border border-line px-8 py-6 md:grid-cols-[220px_1fr] md:gap-x-10">
-            <h2 className="caption text-mute">Vale para os três pacotes</h2>
-            <ul className="grid gap-2 text-[0.9375rem] leading-relaxed text-body">
+          <section
+            aria-labelledby="vale-titulo"
+            className="mt-14 grid gap-5 md:grid-cols-[260px_1fr] md:gap-10"
+          >
+            <h2 id="vale-titulo" className="text-[1.375rem] font-bold tracking-[-0.02em]">
+              Vale para os três pacotes
+            </h2>
+            <ul className="grid gap-2.5 text-[1.0625rem] leading-relaxed text-body">
               {appliesToAll.map((item) => (
-                <li key={item} className="before:mr-2.5 before:text-mute before:content-['—']">
+                <li
+                  key={item}
+                  className="flex gap-3 before:mt-[0.6em] before:size-1.5 before:shrink-0 before:rounded-full before:bg-brand"
+                >
                   {item}
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
+          </section>
 
-        <section
-          aria-labelledby="faq-titulo"
-          className="grid gap-10 border-t border-line pt-18 pb-24 lg:grid-cols-[260px_1fr] lg:gap-x-20"
-        >
-          <h2 id="faq-titulo" className="caption text-brand">
-            Perguntas antes da demonstração
-          </h2>
-          <dl className="grid gap-x-14 gap-y-10 md:grid-cols-2">
-            {faq.map((item) => (
-              <div key={item.q}>
-                <dt className="mb-2.5 text-lede font-bold tracking-[-0.01em]">{item.q}</dt>
-                <dd className="text-[0.9375rem] leading-relaxed text-body">{item.a}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
+          <section
+            aria-labelledby="faq-titulo"
+            className="mt-18 grid gap-8 md:grid-cols-[260px_1fr] md:gap-10"
+          >
+            <h2 id="faq-titulo" className="text-[1.375rem] font-bold tracking-[-0.02em]">
+              Perguntas antes da demonstração
+            </h2>
+            <dl className="grid gap-x-12 gap-y-9 md:grid-cols-2">
+              {faq.map((item) => (
+                <div key={item.q}>
+                  <dt className="mb-1.5 text-[1.0625rem] font-bold">{item.q}</dt>
+                  <dd className="text-[0.9375rem] leading-relaxed text-mute">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        </div>
       </main>
 
       <SiteFooter />

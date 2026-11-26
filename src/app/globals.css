@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
 /*
- * Joshua marketing identity (approved 2026-11-26, direction "Reconhecer").
- * Anchored on the logo navy; signal orange is reserved for calls to action.
- * Editorial surface: no cards, hairline rules, square corners.
+ * Joshua marketing identity. Anchored on the logo navy; signal orange is
+ * reserved for calls to action.
+ * Direction "Percorrer" (approved 2026-11-26): dark ink stage, real product
+ * screens in elevated frames; secondary pages open with a short ink band
+ * ("Continuar o palco") and continue on white.
  */
 @theme {
   --color-ink: #0a1e36;
   --color-brand: #154680;
-  --color-brand-2: #2070b8;
   --color-signal: #ff6b2c;
   --color-on-signal: #0a1e36;
   --color-paper: #f5f3ee;
@@ -16,30 +17,43 @@
   --color-mute: #5a6474;
   --color-body: #2b3648;
 
-  /* Margin ladder: same thresholds and colours as the Joshua app proposal screen */
-  --color-margin-high: #15803d;
-  --color-margin-good: #22c55e;
-  --color-margin-fair: #ca8a04;
-  --color-margin-low: #f97316;
-  --color-margin-bad: #ef4444;
+  --color-on-ink: #ffffff;
+  --color-on-ink-soft: #b9c6d8;
+  --color-on-ink-mute: #5d7392;
+  --color-bezel: #050f1c;
+  --color-brand-soft: #c9d6e8;
 
   --font-sans: var(--font-bricolage), system-ui, sans-serif;
-  --font-ui: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Editorial type scale: display 96 / section 36 / body 19 / caption 12 caps */
-  --text-display: clamp(3rem, 7.5vw, 6rem);
-  --text-display--line-height: 0.98;
-  --text-section: clamp(1.75rem, 3vw, 2.25rem);
-  --text-section--line-height: 1.1;
-  --text-lede: 1.1875rem;
-  --text-lede--line-height: 1.65;
-  --text-caption: 0.75rem;
+  --text-hero: clamp(2.75rem, 6.4vw, 5rem);
+  --text-hero--line-height: 0.95;
+  --text-statement: clamp(2.25rem, 4.4vw, 3.5rem);
+  --text-statement--line-height: 1;
+  --text-step: 1.875rem;
+  --text-step--line-height: 1.1;
+  --text-intro: 1.25rem;
+  --text-intro--line-height: 1.5;
+
+  --radius-screen: 1rem;
+  --radius-phone: 2.375rem;
+  --radius-band: 1.5rem;
+
+  --shadow-stage: 0 40px 90px rgb(0 0 0 / 0.55);
+  --shadow-float: 0 24px 50px rgb(10 30 54 / 0.25);
 }
 
 html {
-  background: var(--color-paper);
+  background: #ffffff;
   color: var(--color-ink);
   -webkit-text-size-adjust: 100%;
+  /* The header is sticky: anchors land below it. */
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -49,29 +63,4 @@ body {
 
 ::selection {
   background: color-mix(in srgb, var(--color-signal) 40%, transparent);
-}
-
-@utility caption {
-  font-size: var(--text-caption);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-@utility highlight {
-  background: linear-gradient(
-    transparent 62%,
-    color-mix(in srgb, var(--color-signal) 55%, transparent) 62%
-  );
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-
-@utility cta-link {
-  font-weight: 700;
-  border-bottom: 3px solid var(--color-signal);
-  transition: border-color 150ms;
-  &:hover {
-    border-color: var(--color-ink);
-  }
 }

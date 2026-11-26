@@ -42,8 +42,13 @@ export function demoUrl(message = "Olá! Quero agendar uma demonstração do Jos
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+/** Page container shared by every section of the site. */
+export const shell = "mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-14";
+
+export const supportEmail = "joshua@appjoshua.com";
+
 export const nav = [
-  { href: "/#problema", label: "O problema" },
   { href: "/#como-funciona", label: "Como funciona" },
+  { href: "/#app-de-campo", label: "App de campo" },
   { href: "/precos", label: "Preços" },
 ] as const;
