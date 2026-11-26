@@ -183,7 +183,7 @@
     <tr>
       <td>Localização (em uso)</td>
       <td>Registrar onde os serviços foram executados</td>
-      <td><span class="badge badge-required">Obrigatório</span></td>
+      <td><span class="badge badge-optional">Opcional</span></td>
     </tr>
   </table>
 
@@ -232,7 +232,7 @@
   <p>No seu dispositivo, armazenamos:</p>
   <ul>
     <li><strong>Tokens de autenticação</strong> — em armazenamento seguro do sistema operacional (Keychain no iOS, Keystore no Android)</li>
-    <li><strong>Cache de dados operacionais</strong> — em banco SQLite local, criptografado e isolado do aplicativo</li>
+    <li><strong>Cache de dados operacionais</strong> — em banco SQLite local, isolado no sandbox do aplicativo pelo sistema operacional e removido ao fazer logout</li>
     <li><strong>Dados biométricos</strong> — processados exclusivamente pelo sistema operacional do dispositivo; o Joshua OPS nunca acessa ou armazena dados biométricos diretamente</li>
   </ul>
 
@@ -254,11 +254,6 @@
     <tr>
       <td>Câmera</td>
       <td>Fotografar evidências de execução dos serviços</td>
-      <td>Ao registrar conclusão de serviço</td>
-    </tr>
-    <tr>
-      <td>Galeria de Fotos</td>
-      <td>Anexar fotos existentes como evidências</td>
       <td>Ao registrar conclusão de serviço</td>
     </tr>
     <tr>
@@ -287,7 +282,7 @@
     <li><strong>Dados operacionais</strong> (fotos, registros de serviço) — retidos enquanto a empresa cliente mantiver contrato ativo com a Fibonacci</li>
     <li><strong>Dados de autenticação</strong> — removidos quando o acesso do usuário é desativado pelo administrador da empresa</li>
     <li><strong>Cache local</strong> — removido automaticamente ao fazer logout ou ao desinstalar o aplicativo</li>
-    <li><strong>Tokens de sessão</strong> — expiram automaticamente após 24 horas de inatividade</li>
+    <li><strong>Tokens de sessão</strong> — a sessão é encerrada automaticamente após 8 horas de inatividade</li>
   </ul>
 
   <h2>8. Seus Direitos (LGPD)</h2>
@@ -329,7 +324,7 @@
   </div>
 
   <p style="margin-top: 32px; font-size: 13px; color: #8a8a9a; text-align: center;">
-    Última atualização: 14 de fevereiro de 2026
+    Última atualização: 11 de setembro de 2026
   </p>
 
 </div>
