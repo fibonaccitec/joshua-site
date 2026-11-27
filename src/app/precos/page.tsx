@@ -4,19 +4,26 @@ import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
 import { PageBand } from "@/components/page-band";
 import { brl, packages, type Package } from "@/lib/pricing";
-import { demoUrl, monthlyPrice, openGraph, shell, site } from "@/lib/site";
+import { demoUrl, openGraph, shell, site } from "@/lib/site";
+import { softwareNode } from "@/lib/schema";
+
+const pageTitle = "Preços do sistema de gestão Joshua: a partir de R$ 690/mês";
 
 const description =
   "Planos do Joshua por tamanho de equipe: Standard até 5 usuários por R$ 690/mês, Premium até 15 usuários por R$ 1.490/mês e Enterprise sob consulta.";
 
 export const metadata: Metadata = {
-  title: "Preços",
+  title: { absolute: pageTitle },
   description,
   alternates: { canonical: "/precos" },
-  openGraph: openGraph("/precos", "Preços · Joshua", description),
+  openGraph: openGraph("/precos", pageTitle, description),
 };
 
 const faq = [
+  {
+    q: "Quanto custa um sistema de gestão para empresa de instalação?",
+    a: "No Joshua, a partir de R$ 690 por mês para até 5 pessoas (Standard) e R$ 1.490 por mês para até 15 (Premium). Acima disso, o valor sai de uma conversa com o time comercial.",
+  },
   {
     q: "Quem conta como usuário?",
     a: "Toda pessoa que faz login no Joshua. Vendedor, projetista, financeiro e técnico de campo contam igual; não há usuário de “meio preço”.",
@@ -31,7 +38,7 @@ const faq = [
   },
   {
     q: "Como é a demonstração?",
-    a: "Uma conversa de 30 a 60 minutos com o time do Joshua, olhando o sistema com os exemplos da sua integradora.",
+    a: "Uma conversa de 30 a 60 minutos com o time do Joshua, olhando o sistema com os exemplos da sua empresa.",
   },
 ] as const;
 
@@ -39,6 +46,7 @@ const appliesToAll = [
   "Cada login conta como um usuário, do escritório ou do campo.",
   "Implantação orçada depois de analisar a sua empresa, por exemplo se haverá migração de dados.",
   "As funcionalidades de cada pacote são apresentadas na demonstração.",
+  "Os mesmos pacotes valem para todos os segmentos: energia solar, ar-condicionado, automação e segurança, esquadrias, cortinas e persianas.",
 ] as const;
 
 function usersLabel(pkg: Package, previousMax: number | null) {
@@ -72,21 +80,16 @@ function ctaFor(pkg: Package) {
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
+    softwareNode,
     {
-      "@type": "Product",
-      name: site.name,
-      description: site.description,
-      brand: { "@type": "Brand", name: site.name },
-      offers: packages
-        .filter((p) => p.monthly !== null)
-        .map((p) => ({
-          "@type": "Offer",
-          name: p.name,
-          price: p.monthly,
-          priceCurrency: "BRL",
-          priceSpecification: monthlyPrice(p.monthly as number),
-          url: `${site.url}/precos`,
-        })),
+      "@type": "WebPage",
+      "@id": `${site.url}/precos#webpage`,
+      url: `${site.url}/precos`,
+      name: "Preços do sistema de gestão Joshua",
+      description,
+      inLanguage: "pt-BR",
+      isPartOf: { "@id": `${site.url}/#website` },
+      about: { "@id": `${site.url}/#software` },
     },
     {
       "@type": "FAQPage",

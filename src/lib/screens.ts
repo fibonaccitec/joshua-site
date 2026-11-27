@@ -32,7 +32,7 @@ export const webScreens = {
     src: "/screens/web-compras.webp",
     width: 1600,
     height: 1000,
-    alt: "Ordens de compra do Joshua agrupadas por etapa, do orçamento ao recebido",
+    alt: "Ordens de compra do Joshua agrupadas por situação, do orçamento ao recebido",
   },
   obra: {
     src: "/screens/web-obra.webp",

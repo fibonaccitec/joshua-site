@@ -4,7 +4,7 @@ export const site = {
   url: "https://www.appjoshua.com",
   appUrl: "https://web.appjoshua.com",
   description:
-    "Sistema de gestão para integradoras de automação, áudio, vídeo e segurança: proposta, projeto, compras, obra, campo e financeiro no mesmo lugar.",
+    "Sistema de gestão para empresas que vendem e instalam: proposta com margem, compras, obra, OS, app de campo offline e financeiro. A partir de R$ 690/mês.",
   publisher: "Fibonacci",
   locale: "pt_BR",
 } as const;
@@ -47,7 +47,14 @@ export const shell = "mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-14";
 
 export const supportEmail = "joshua@appjoshua.com";
 
+/** Joshua OPS (field app) store listings, verified live on 2026-11-27. */
+export const appStores = {
+  ios: "https://apps.apple.com/br/app/joshua-ops/id6756849886",
+  android: "https://play.google.com/store/apps/details?id=com.fibonacci.joshuaops",
+} as const;
+
 export const nav = [
+  { href: "/segmentos", label: "Segmentos" },
   { href: "/#como-funciona", label: "Como funciona" },
   { href: "/#app-de-campo", label: "App de campo" },
   { href: "/precos", label: "Preços" },

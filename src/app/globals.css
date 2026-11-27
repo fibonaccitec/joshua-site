@@ -23,6 +23,11 @@
   --color-bezel: #050f1c;
   --color-brand-soft: #c9d6e8;
 
+  /* Segment pages: "Hoje" × "Com o Joshua" labels and the honest "não faz" box. */
+  --color-before: #b91c1c;
+  --color-after: #15803d;
+  --color-signal-soft: #fff4ed;
+
   --font-sans: var(--font-bricolage), system-ui, sans-serif;
 
   --text-hero: clamp(2.75rem, 6.4vw, 5rem);
@@ -63,4 +68,11 @@ body {
 
 ::selection {
   background: color-mix(in srgb, var(--color-signal) 40%, transparent);
+}
+
+/* Segment picker: the new screenshot fades in when a chip is chosen. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 }

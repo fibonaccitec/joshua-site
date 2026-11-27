@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Política de Privacidade",
   description,
   alternates: { canonical: "/privacidade" },
-  openGraph: openGraph("/privacidade", "Política de Privacidade · Joshua", description),
+  openGraph: openGraph("/privacidade", "Política de Privacidade | Joshua", description),
 };
 
 const sections = [

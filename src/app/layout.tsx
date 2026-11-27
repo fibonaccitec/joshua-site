@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
 import { site } from "@/lib/site";
+import { siteEntities } from "@/lib/schema";
 import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
 
@@ -13,8 +14,8 @@ const bricolage = Bricolage_Grotesque({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Joshua · Sistema de gestão para integradoras",
-    template: "%s · Joshua",
+    default: "Sistema de gestão para empresas de instalação | Joshua",
+    template: "%s | Joshua",
   },
   description: site.description,
   applicationName: site.name,
@@ -22,20 +23,13 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const organization = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.publisher,
-  url: site.url,
-  logo: `${site.url}/assets/logo_joshua_desktop.png`,
-  brand: { "@type": "Brand", name: site.name },
-};
+const graph = { "@context": "https://schema.org", "@graph": siteEntities };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-BR" className={bricolage.variable}>
       <body className="min-h-dvh">
-        <JsonLd data={organization} />
+        <JsonLd data={graph} />
         {children}
       </body>
     </html>

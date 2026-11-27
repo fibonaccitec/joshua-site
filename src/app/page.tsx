@@ -5,42 +5,36 @@ import { SiteFooter } from "@/components/site-footer";
 import { JsonLd } from "@/components/json-ld";
 import { PhoneFrame, ScreenFrame } from "@/components/device";
 import { ProductTour, type TourStep } from "@/components/product-tour";
-import { brl, packages, startingPackage } from "@/lib/pricing";
+import { SegmentPicker } from "@/components/segment-picker";
+import { otherSegments, pickerItems } from "@/lib/segments";
+import { brl, startingPackage } from "@/lib/pricing";
 import { appScreens, webScreens } from "@/lib/screens";
-import { demoUrl, monthlyPrice, openGraph, shell, site } from "@/lib/site";
+import { demoUrl, openGraph, shell, site } from "@/lib/site";
+import { softwareNode } from "@/lib/schema";
 
-const title = "Joshua · Sistema de gestão para integradoras";
+const title = "Sistema de gestão para empresas de instalação | Joshua";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: openGraph("/", title, site.description),
 };
 
-const priced = packages.filter((p): p is typeof p & { monthly: number } => p.monthly !== null);
-
-const softwareApplication = {
+/** Organization and website live in the layout; the priced product is declared here. */
+const webPage = {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: site.name,
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web, iOS, Android",
-  description: site.description,
-  url: site.url,
-  publisher: { "@type": "Organization", name: site.publisher },
-  offers: {
-    "@type": "AggregateOffer",
-    priceCurrency: "BRL",
-    lowPrice: startingPackage.monthly,
-    highPrice: Math.max(...priced.map((p) => p.monthly)),
-    offerCount: priced.length,
-    offers: priced.map((p) => ({
-      "@type": "Offer",
-      name: p.name,
-      price: p.monthly,
-      priceCurrency: "BRL",
-      priceSpecification: monthlyPrice(p.monthly),
-    })),
-  },
+  "@graph": [
+    softwareNode,
+    {
+      "@type": "WebPage",
+      "@id": `${site.url}/#webpage`,
+      url: `${site.url}/`,
+      name: title,
+      description: site.description,
+      inLanguage: "pt-BR",
+      isPartOf: { "@id": `${site.url}/#website` },
+      about: { "@id": `${site.url}/#software` },
+    },
+  ],
 };
 
 const tour: readonly TourStep[] = [
@@ -88,19 +82,25 @@ function DemoButton({ className = "" }: { className?: string }) {
 export default function Home() {
   return (
     <div className="bg-white">
-      <JsonLd data={softwareApplication} />
+      <JsonLd data={webPage} />
       <SiteHeader />
 
       <main>
         <div className="overflow-hidden">
           <section>
             <div className={`${shell} pt-14 md:pt-20`}>
-              <h1 className="max-w-[14ch] text-hero font-extrabold tracking-[-0.045em]">
-                Sua integradora inteira numa tela só.
+              <h1 className="tracking-[-0.045em]">
+                <span className="block max-w-[60ch] text-[0.9375rem] leading-normal font-semibold tracking-normal text-brand">
+                  Sistema de gestão para empresas que vendem e instalam: energia solar,
+                  ar-condicionado, automação e segurança, esquadrias, cortinas e persianas.
+                </span>
+                <span className="mt-5 block max-w-[16ch] text-hero font-extrabold">
+                  Venda, obra e equipe de campo numa tela só.
+                </span>
               </h1>
-              <p className="mt-6 max-w-[36ch] text-intro text-mute">
-                Proposta, projeto, compras, obra e campo conversando entre si. Sem planilha, sem
-                depender de quem está de férias.
+              <p className="mt-6 max-w-[40ch] text-intro text-mute">
+                Proposta com margem, compras, obras, ordens de serviço, app do técnico e financeiro
+                no mesmo sistema. Sem planilha, sem depender de quem está de férias.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <DemoButton />
@@ -136,13 +136,30 @@ export default function Home() {
           </section>
 
           <section
-            id="como-funciona"
-            aria-labelledby="como-funciona-titulo"
-            className="relative -mt-px bg-ink pt-20 pb-24 text-on-ink md:pt-28 md:pb-32"
+            id="segmentos"
+            aria-labelledby="segmentos-titulo"
+            className="relative -mt-px bg-ink pt-16 pb-8 text-on-ink md:pt-24"
           >
             <div className={shell}>
-              <h2 id="como-funciona-titulo" className="sr-only">
-                Como funciona
+              <SegmentPicker
+                items={pickerItems}
+                others={otherSegments}
+                headingId="segmentos-titulo"
+              />
+            </div>
+          </section>
+
+          <section
+            id="como-funciona"
+            aria-labelledby="como-funciona-titulo"
+            className="bg-ink pt-16 pb-24 text-on-ink md:pt-24 md:pb-32"
+          >
+            <div className={shell}>
+              <h2
+                id="como-funciona-titulo"
+                className="mb-10 max-w-[24ch] border-t border-on-ink/10 pt-16 text-[clamp(2rem,3.6vw,2.75rem)] font-light tracking-[-0.03em] md:pt-24"
+              >
+                Da venda à obra entregue, no mesmo sistema
               </h2>
               <ProductTour steps={tour} />
             </div>
@@ -206,7 +223,9 @@ export default function Home() {
             </div>
             <div className="md:ml-auto md:text-right">
               <DemoButton className="px-7 py-4 text-[1.0625rem]" />
-              <p className="mt-3 text-sm text-brand-soft">Com o time do Joshua, de 30 a 60 minutos</p>
+              <p className="mt-3 text-sm text-brand-soft">
+                Com o time do Joshua, de 30 a 60 minutos
+              </p>
             </div>
           </div>
         </section>
