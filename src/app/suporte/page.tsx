@@ -7,13 +7,13 @@ import { PageBand } from "@/components/page-band";
 import { openGraph, shell, supportEmail } from "@/lib/site";
 
 const description =
-  "Central de suporte do Joshua OPS, o app de campo do Joshua: contato por e-mail e respostas sobre login, uso sem internet, fotos, localização e exclusão de dados.";
+  "Central de suporte do Joshua OPS, o app de campo do Joshua: contato por e-mail e respostas sobre login, uso offline, fotos, localização e exclusão de dados.";
 
 export const metadata: Metadata = {
   title: "Suporte",
   description,
   alternates: { canonical: "/suporte" },
-  openGraph: openGraph("/suporte", "Suporte · Joshua", description),
+  openGraph: openGraph("/suporte", "Suporte | Joshua", description),
 };
 
 const faq = [

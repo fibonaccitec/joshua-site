@@ -9,7 +9,7 @@ import { demoUrl, nav, site } from "@/lib/site";
 export function SiteHeader({ current }: { current?: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-white/90 text-ink backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1440px] items-center gap-x-9 px-5 py-4 sm:px-10 lg:px-14">
+      <div className="mx-auto flex max-w-[1440px] items-center gap-x-5 px-5 sm:gap-x-9 py-4 sm:px-10 lg:px-14">
         <Link href="/" className="mr-auto">
           <Logo eager className="w-[104px] sm:w-[118px]" />
         </Link>
@@ -25,6 +25,13 @@ export function SiteHeader({ current }: { current?: string }) {
             </Link>
           ))}
         </nav>
+        <Link
+          href="/segmentos"
+          aria-current={current === "/segmentos" ? "page" : undefined}
+          className="text-[0.9375rem] font-medium text-body hover:text-brand aria-[current=page]:font-semibold aria-[current=page]:text-brand md:hidden"
+        >
+          Segmentos
+        </Link>
         <Link
           href="/precos"
           aria-current={current === "/precos" ? "page" : undefined}
